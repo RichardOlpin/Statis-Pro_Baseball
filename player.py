@@ -38,13 +38,11 @@ class Player:
                    }
         self.cd = None
         self.arm = None
-        self.stats_all = self.get_player_stats(self.id)
-        self.stats_hitting = self.stats_all.get('hitting')
-        self.stats_fielding = self.stats_all.get('fielding')
-        self.stats_pitching = self.stats_all.get('pitching')
 
-    @classmethod
-    def get_player_stats(cls, player_id, group='[hitting,pitching,fielding]',
+    def __repr__(self):
+        return f'{self.first_name} {self.last_name} {self.stats_all}'
+
+    def get_player_stats(self, player_id, group='[hitting,pitching,fielding]',
                          stat_type='season',
                          params=None):
         if not params:
