@@ -5,7 +5,7 @@ class Player:
     def __init__(self, **kwargs):
         self.id = kwargs['person']['id']
         self.first_name = kwargs['person']['fullName'].split()[0]
-        self.last_name = kwargs['person']['fullName'].split()[1:]
+        self.last_name = ' '.join(kwargs['person']['fullName'].split()[1:])
         self.position = Position(**kwargs['position'])
         self.bats = None
         self.error = None
