@@ -7,6 +7,10 @@ class Player:
         self.first_name = kwargs['person']['fullName'].split()[0]
         self.last_name = ' '.join(kwargs['person']['fullName'].split()[1:])
         self.position = Position(**kwargs['position'])
+        self.stats_all = self.get_player_stats(self.id)
+        self.stats_hitting = self.stats_all.get('hitting')
+        self.stats_fielding = self.stats_all.get('fielding')
+        self.stats_pitching = self.stats_all.get('pitching')
         self.bats = None
         self.error = None
         self.obr = self.get_obr()
