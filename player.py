@@ -60,6 +60,34 @@ class Player:
             all_stats[stat_type] = stats_value
         return all_stats
 
+    def get_obr(self):
+        scoring_rate = self._get_scoring_rate()
+        if scoring_rate > .45:
+            return 'A'
+        elif scoring_rate > .35:
+            return 'B'
+        elif scoring_rate > .25:
+            return 'C'
+        elif scoring_rate > .15:
+            return 'D'
+        else:
+            return 'E'
+
+    def _get_scoring_rate(self):
+        scoring_rate = 0.0
+        if self.stats_hitting is not None:
+            times_on_base = self.stats_hitting.get('hits', 0) + \
+                            self.stats_hitting.get('baseOnBalls', 0) +\
+                            self.stats_hitting.get('hitByPitch', 0) + \
+                            self.stats_hitting.get('intentionalWalks', 0)
+            try:
+                scoring_rate = self.stats_hitting['runs'] / times_on_base
+            except ZeroDivisionError:
+                return scoring_rate
+            return scoring_rate
+        return scoring_rate
+
+
 
 
 class Position:
