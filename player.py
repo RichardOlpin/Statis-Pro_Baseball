@@ -9,7 +9,7 @@ class Player:
         self.position = Position(**kwargs['position'])
         self.bats = None
         self.error = None
-        self.obr = None
+        self.obr = self.get_obr()
         self.sp = None
         self.hr = None
         self.cd = None
@@ -46,8 +46,12 @@ class Player:
         if not params:
             params = {'personId': player_id,
                       'hydrate': f'stats(group={group},type={stat_type}),currentTeam'}
-        results = statsapi.get('person', params)['people'][0]['stats']
+        person_results = statsapi.get('person', params)['people'][0]
         all_stats = dict()
+        results = person_results.get('stats')
+        if results is None:
+            print(f'No stats found for {self.first_name} {self.last_name}')
+            return {}
         for r in results:
             stat_type = r['group']['displayName']
             stats_value = r['splits'][0]['stat']
