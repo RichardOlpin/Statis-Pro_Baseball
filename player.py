@@ -13,12 +13,12 @@ class Player:
         self.stats_pitching = self.stats_all.get('pitching')
         self.bats = None
         self.error = None
-        self.obr = self.get_obr()
-        self.sp = None
+        self.obr = self._get_obr()
+        self.sp = self._get_speed()
         self.hr = None
-        self.cd = None
+        self.cht = None
         self.sac = None
-        self.inj = None
+        self.inj = self._get_inj()
         self.single_inf = None
         self.single7 = None
         self.single8 = None
@@ -60,7 +60,7 @@ class Player:
             all_stats[stat_type] = stats_value
         return all_stats
 
-    def get_obr(self):
+    def _get_obr(self):
         scoring_rate = self._get_scoring_rate()
         if scoring_rate > .45:
             return 'A'
@@ -72,6 +72,26 @@ class Player:
             return 'D'
         else:
             return 'E'
+
+    def _get_speed(self):
+        if self.stats_hitting is not None:
+            try:
+                steals = float(self.stats_hitting.get('stolenBasePercentage', 0.0))
+            except ValueError:
+                steals = 0.0
+            # print(f'{self}:{steals}')
+            if steals >= 0.7:
+                return 'A'
+            elif steals >= 0.5:
+                return 'B'
+            elif steals >= 0.3:
+                return 'C'
+            elif steals >= 0.1:
+                return 'D'
+            else:
+                return 'E'
+        else:
+            return None
 
     def _get_scoring_rate(self):
         scoring_rate = 0.0
@@ -86,6 +106,31 @@ class Player:
                 return scoring_rate
             return scoring_rate
         return scoring_rate
+
+    def _get_inj(self):
+        if self.stats_hitting is None:
+            return None
+        games_played = self.stats_hitting.get('gamesPlayed', 162)
+        games_missed = 162 - games_played
+        if games_missed == 0:
+            return 0
+        elif games_missed == 1:
+            return 1
+        elif 2 <= games_missed <= 3:
+            return 2
+        elif 4 <= games_missed <= 5:
+            return 3
+        elif 6 <= games_missed <= 10:
+            return 4
+        elif 11 <= games_missed <= 20:
+            return 5
+        elif 21 <= games_missed <= 30:
+            return 6
+        elif 31 <= games_missed <= 80:
+            return 7
+        elif 81 <= games_missed <= 162:
+            return 8
+
 
 
 
