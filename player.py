@@ -16,7 +16,7 @@ class Player:
         self.obr = self._get_obr()
         self.sp = self._get_speed()
         self.hr = None
-        self.cht = None
+        self.cht = self._get_cht()
         self.sac = None
         self.inj = self._get_inj()
         self.single_inf = None
@@ -37,7 +37,7 @@ class Player:
                    'hr': None
                    }
         self.cd = None
-        self.arm = None
+        self.arm = self._get_arm()
 
     def __repr__(self):
         return f'{self.first_name} {self.last_name} {self.stats_all}'
@@ -57,6 +57,10 @@ class Player:
         for r in results:
             stat_type = r['group']['displayName']
             stats_value = r['splits'][0]['stat']
+            if stat_type == 'hitting':
+                stats_value['batSide'] = person_results['batSide']['code']
+            if stat_type == 'pitching':
+                stats_value['throws'] = person_results['pitchHand']['code']
             all_stats[stat_type] = stats_value
         return all_stats
 
@@ -131,7 +135,23 @@ class Player:
         elif 81 <= games_missed <= 162:
             return 8
 
+    def _get_cht(self):
+        if self.stats_hitting is None:
+            return None
+        if self.position.name == 'Pitcher':
+            return 'P'
+        hrs = self.stats_hitting['homeRuns']
+        bat_side = self.stats_hitting['batSide']
+        if hrs >= 15:
+            batter_type = 'P'
+        else:
+            batter_type = 'N'
+        return bat_side + batter_type
 
+    def _get_arm(self):
+        if self.stats_pitching is None:
+            return None
+        return self.stats_pitching.get('throws')
 
 
 
