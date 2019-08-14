@@ -11,12 +11,12 @@ class Player:
         self.full_name = box.person.fullName
         self.position = Position(box.position)
         self.stats_all = self.get_player_stats(self.id)
-        self.stats_hit = self.stats_all.get("hitting")
-        self.stats_hit_adv = self.stats_all.get("hitting_adv")
-        self.stats_field = self.stats_all.get("fielding")
-        self.stats_field_adv = self.stats_all.get("fielding_adv")
-        self.stats_pitch = self.stats_all.get("pitching")
-        self.stats_pitch_adv = self.stats_all.get("pitching_adv")
+        self.stats_hit = self.stats_all.hitting
+        self.stats_hit_adv = self.stats_all.hitting_adv
+        self.stats_field = self.stats_all.fielding
+        self.stats_field_adv = self.stats_all.fielding_adv
+        self.stats_pitch = self.stats_all.pitching
+        self.stats_pitch_adv = self.stats_all.pitching_adv
         self.error = None
         self.obr = self._get_obr()
         self.sp = self._get_speed()
@@ -77,7 +77,14 @@ class Player:
     def get_player_stats(self, player_id, season=2016):
         player_stats = self._fetch_player_stats(player_id, season)
         player_stats_adv = self._fetch_adv_player_stats(player_id, season)
-        all_stats = dict()
+        all_stats = {
+            "hitting": {},
+            "hitting_adv": {},
+            "fielding": {},
+            "fielding_adv": {},
+            "pitching": {},
+            "pitching_adv": {}
+        }
         if player_stats is None and player_stats_adv is None:
             print(f"No stat found for {self.full_name}")
             return {}
@@ -118,7 +125,7 @@ class Player:
             # if stat_type == 'pitching':
             #     stats_value['throws'] = person_results['pitchHand']['code']
             all_stats[stat_name] = stats_value
-        return all_stats
+        return Box(all_stats)
 
     def _get_obr(self):
         scoring_rate = self._get_scoring_rate()
