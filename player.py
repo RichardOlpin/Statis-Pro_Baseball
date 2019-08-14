@@ -37,7 +37,7 @@ class Player:
         self.bb = None
         self.hbp = None
         self.out = self._get_card_numbers()
-        self.bd = {"double": None, "triple": None, "hr": None}
+        self.bd = Box({"double": None, "triple": None, "hr": None})
         self.cd = None
         self.arm = self._get_arm()
 
