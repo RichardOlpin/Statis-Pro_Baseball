@@ -31,7 +31,7 @@ class Player:
         self.double7 = None
         self.double8 = None
         self.double9 = None
-        self.triple8 = None
+        self.triple = None
         self.hr = None
         self.k = None
         self.bb = None
@@ -277,13 +277,69 @@ class Player:
                 self.single8 = next_num
                 next_num += equal_increment
                 self.single9 = next_num
+            elif pull_side == "S":
+                next_num += equal_increment
+                self.single7 = next_num
+                next_num += equal_increment + remainder
+                self.single8 = next_num
+                next_num += equal_increment
+                self.single9 = next_num
+        else:
+            next_num += equal_increment
+            self.single7 = next_num
+            next_num += equal_increment
+            self.single8 = next_num
+            next_num += equal_increment
+            self.single9 = next_num
 
         doubles_num = round(doubles * eval_factor)
+        (equal_increment, remainder) = divmod(doubles_num, 3)
+        if remainder > 0:
+            pull_side = self.cht[0]
+            if pull_side == "R":
+                next_num += equal_increment + remainder
+                self.double7 = next_num
+                next_num += equal_increment
+                self.double8 = next_num
+                next_num += equal_increment
+                self.double9 = next_num
+            elif pull_side == "L":
+                next_num += equal_increment + remainder
+                self.double7 = next_num
+                next_num += equal_increment
+                self.double8 = next_num
+                next_num += equal_increment
+                self.double9 = next_num
+            elif pull_side == "S":
+                next_num += equal_increment
+                self.double7 = next_num
+                next_num += equal_increment + remainder
+                self.double8 = next_num
+                next_num += equal_increment
+                self.double9 = next_num
+        else:
+            next_num += equal_increment
+            self.double7 = next_num
+            next_num += equal_increment
+            self.double8 = next_num
+            next_num += equal_increment
+            self.double9 = next_num
         triples_num = round(triples * eval_factor)
+        next_num += triples_num
+        self.triple = next_num
         hrs_num = round(hrs * eval_factor)
+        next_num += hrs_num
+        self.hr = next_num
         strikeouts_num = round(strikeouts * eval_factor)
+        next_num += strikeouts_num
+        self.k = next_num
         walks_num = round(walks * eval_factor - 7.0)
+        next_num += walks_num
+        self.bb = next_num
         hpb_num = round(hbp * eval_factor)
+        next_num += hpb_num
+        self.hbp = next_num
+        self.out = next_num
 
         return 0
 
